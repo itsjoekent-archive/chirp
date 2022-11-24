@@ -1,2 +1,3 @@
-# piatzo.ai
+# Chirp
+
 new twitter without the fascists

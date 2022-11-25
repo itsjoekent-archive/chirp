@@ -37,7 +37,7 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-provider "google_default" {
+provider "google-default" {
   region = "us-east4"
   zone   = "us-east4-a"
 }
@@ -58,11 +58,17 @@ module "environment_config" {
 
 # TODO: sanitize the branch name, no symbols except dashes, all lowercase
 
+locals {
+  branch_name_sanitized = replace(lower(var.branch_name), "/[^a-z0-9-]/", "-")
+  branch_name_short     = substr(local.branch_name_sanitized, 0, 16)
+}
+
 module "gcp_project" {
-  source              = "../../modules/gcp_project"
-  gcp_organization_id = var.gcp_organization_id
-  branch_name         = var.branch_name
-  environment_name    = var.environment_name
+  source                = "../../modules/gcp_project"
+  gcp_organization_id   = var.gcp_organization_id
+  branch_name           = var.branch_name
+  branch_name_sanitized = local.branch_name_sanitized
+  environment_name      = var.environment_name
 }
 
 provider "google" {
@@ -74,6 +80,8 @@ provider "google" {
 locals {
   config = {
     branch_name                 = var.branch_name
+    branch_name_sanitized       = local.branch_name_sanitized
+    branch_name_short           = local.branch_name_short
     environment_name            = var.environment_name
     gcp_project_id              = gcp_project.id
     mongo_atlas_organization_id = var.mongo_atlas_organization_id
@@ -92,8 +100,8 @@ module "gcp_network" {
   }
 }
 
-module "mongo_organization" {
-  source = "../../modules/mongo_organization"
+module "mongo_project" {
+  source = "../../modules/mongo_project"
   config = local.config
 
   providers = {
@@ -102,8 +110,8 @@ module "mongo_organization" {
 }
 
 resource "mongodbatlas_advanced_cluster" "api" {
-  name                   = "chirp-api-${var.branch_name}"
-  project_id             = mongo_organization.project_id
+  name                   = "Chirp API - ${var.branch_name}"
+  project_id             = mongo_project.id
   cluster_type           = "REPLICASET"
   mongo_db_major_version = local.config.global.mongo_version
   disk_size_gb           = var.config.environment.mongo_disk_size
@@ -126,7 +134,7 @@ module "mongo_configure_cluster" {
   source = "../../modules/mongo_configure_cluster"
   config = local.config
 
-  mongo_project_id   = mongo_organization.project_id
+  mongo_project_id   = mongo_project.id
   mongo_cluster_name = mongodbatlas_advanced_cluster.api.cluster_id
   gcp_cloud_run_ips  = gcp_network.ip_addresses
 
@@ -135,7 +143,7 @@ module "mongo_configure_cluster" {
   }
 }
 
-module "hello_world_service" {
+module "hello_world_gcp_service" {
   source = "../../modules/gcp_cloud_run_service"
   config = local.config
 

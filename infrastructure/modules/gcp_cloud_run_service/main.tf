@@ -49,3 +49,7 @@ resource "google_cloud_run_service" "api_service" {
     latest_revision = true
   }
 }
+
+output "url" {
+  value = google_cloud_run_service.api_service.*.status.url
+}

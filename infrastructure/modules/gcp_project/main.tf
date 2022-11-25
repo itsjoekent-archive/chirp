@@ -6,6 +6,10 @@ variable "branch_name" {
   type = string
 }
 
+variable "branch_name_sanitized" {
+  type = string
+}
+
 variable "environment_name" {
   type = string
 }
@@ -26,7 +30,7 @@ resource "google_folder" "api_folder" {
 
 resource "google_project" "api_project" {
   name       = "Chirp API - ${var.environment_name} - ${var.branch_name}"
-  project_id = "chirp-${var.environment_name}-${var.branch_name}"
+  project_id = "chirp-${var.environment_name}-${var.branch_name_sanitized}"
   folder_id  = google_folder.api_folder
 }
 

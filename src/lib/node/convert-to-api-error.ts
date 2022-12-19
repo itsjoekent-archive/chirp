@@ -7,7 +7,6 @@ export default function convertToApiError(error: Chirp.ErrorApiResponse | Error 
     const apiError: Chirp.ErrorApiResponse = {
       error: {
         message: copy['genericServerError'][defaultLanguageCode](),
-        messageCopyId: 'genericServerError',
         status: 400,
         serverErrorId: uuid(),
       }

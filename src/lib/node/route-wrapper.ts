@@ -23,8 +23,12 @@ export default async function routeWrapper(
       const apiError = convertToApiError(error);
       const message = error?.stack || error?.message || error?.error?.message || new Error().stack;
 
-      logger.error(`[Api Error ID: ${apiError.error.serverErrorId}] ${message}`);
-      response.status(apiError.error.status).json(apiError);
+      const { error: { status } } = apiError;
+      if (status >= 500) {
+        logger.error(`[Api Error ID: ${apiError.error.serverErrorId}] ${message}`);
+      }
+      
+      response.status(status).json(apiError);
     }
   });
 }

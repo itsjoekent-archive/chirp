@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@chirp/*": ["src/*"]
+    },
+  },
+  "exclude": ["node_modules"]
+}

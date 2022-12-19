@@ -20,18 +20,18 @@ node_modules/
 # TypeScript cache
 *.tsbuildinfo
 
+# TypesScript build
+dist/
+
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
 
-# Optional REPL history
-.node_repl_history
-
 # dotenv environment variables file
-.env
-.env.test
+env/.env.node
+env/.env.web
 
 # Terraform
 .terraform

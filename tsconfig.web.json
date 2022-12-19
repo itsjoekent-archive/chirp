@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2020",
+    "jsx": "react",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types/shared",
+      "./src/types/node"
+    ]
+  }
+}

@@ -21,10 +21,10 @@ export default async function routeWrapper(
       });
     } catch (error: any) {
       const apiError = convertToApiError(error);
-      const message = error?.stack || error?.message || error?.error?.message || new Error().stack;
 
       const { error: { status } } = apiError;
       if (status >= 500) {
+        const message = error?.stack || error?.message || error?.error?.message || new Error().stack;
         logger.error(`[Api Error ID: ${apiError.error.serverErrorId}] ${message}`);
       }
       

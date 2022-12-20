@@ -66,7 +66,7 @@ type UniqueValidationConfig<
   >;
 };
 
-type IsUniqueHandleValidationParameterType<
+type IsUniqueValidationParameterType<
   PreprocessorFunctionValueType,
   PreprocessorFunctionReturnType
 > = Parameters<
@@ -77,7 +77,7 @@ type IsUniqueHandleValidationParameterType<
     >
   >
 >[0];
-type IsUniqueHandleValidationReturnType<
+type IsUniqueValidationReturnType<
   PreprocessorFunctionValueType,
   PreprocessorFunctionReturnType
 > = ReturnType<
@@ -89,16 +89,16 @@ type IsUniqueHandleValidationReturnType<
   >
 >;
 
-async function isUniqueHandleValidationHelper<
+async function isUniqueValidationHelper<
   PreprocessorFunctionValueType = any,
   PreprocessorFunctionReturnType = string
 >(
-  options: IsUniqueHandleValidationParameterType<
+  options: IsUniqueValidationParameterType<
     PreprocessorFunctionValueType,
     PreprocessorFunctionReturnType
   >
 ): Promise<
-  IsUniqueHandleValidationReturnType<
+  IsUniqueValidationReturnType<
     PreprocessorFunctionValueType,
     PreprocessorFunctionReturnType
   >
@@ -140,7 +140,7 @@ async function isUniqueHandleValidationHelper<
 export const isUniqueHandleValidation: ServerValidationFunction<{}> = async (
   options
 ) =>
-  isUniqueHandleValidationHelper({
+  isUniqueValidationHelper({
     ...options,
     config: {
       field: 'handle',
@@ -151,7 +151,7 @@ export const isUniqueHandleValidation: ServerValidationFunction<{}> = async (
 export const isUniqueEmailValidation: ServerValidationFunction<{}> = async (
   options
 ) =>
-  isUniqueHandleValidationHelper({
+  isUniqueValidationHelper({
     ...options,
     config: {
       field: 'email',

@@ -2,6 +2,7 @@ import type { Router } from 'express';
 import type { MongoClient } from 'mongodb';
 import type { Logger } from 'pino';
 import convertToApiError from '@chirp/lib/node/convert-to-api-error';
+import { Chirp } from '@chirp/types/shared/chirp';
 
 export default async function routeWrapper(
   router: Router, 

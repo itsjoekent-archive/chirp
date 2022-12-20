@@ -4,6 +4,7 @@ import type { MongoClient } from 'mongodb';
 import type { Logger } from 'pino';
 import getLanguageFromRequest from '@chirp/lib/node/get-language-from-request';
 import routeWrapper from '@chirp/lib/node/route-wrapper';
+import { Chirp } from '@chirp/types/shared/chirp';
 import postChirper from './post-chirper';
 
 // ⬇️ Add new routes here ⬇️

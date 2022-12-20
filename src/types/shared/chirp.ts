@@ -14,13 +14,13 @@ export module Chirp {
   export type ChirpAttachment = {
     id: string;
     type:
-    | 'IMAGE'
-    | 'VIDEO'
-    | 'LINK'
-    | 'POLL'
-    | 'HASHTAG'
-    | 'AUTO_DELETE'
-    | 'GIF';
+      | 'IMAGE'
+      | 'VIDEO'
+      | 'LINK'
+      | 'POLL'
+      | 'HASHTAG'
+      | 'AUTO_DELETE'
+      | 'GIF';
   };
 
   export type ImageChirpAttachment = {
@@ -128,16 +128,20 @@ export module Chirp {
     };
   };
 
-  export type DataApiResponse<DataType> = {
-    data: DataType;
-  } | ErrorApiResponse;
+  export type DataApiResponse<DataType> =
+    | {
+        data: DataType;
+      }
+    | ErrorApiResponse;
 
-  export type PaginatedDataApiResponse<DataType> = {
-    data: DataType[];
-    pagination: {
-      lastId: string;
-    },
-  } | ErrorApiResponse;
+  export type PaginatedDataApiResponse<DataType> =
+    | {
+        data: DataType[];
+        pagination: {
+          lastId: string;
+        };
+      }
+    | ErrorApiResponse;
 
   export type PostChirperRequestBody = {
     name: string;
@@ -148,7 +152,7 @@ export module Chirp {
   };
 
   export type PostChirperResponse = DataApiResponse<{
-    chirper: ClientChirper,
-    auth: ApiToken,
+    chirper: ClientChirper;
+    auth: ApiToken;
   }>;
 }

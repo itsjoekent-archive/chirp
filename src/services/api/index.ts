@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import pinoHttp from 'pino-http';
-import createLogger from '@chirp/lib/node/create-logger'; 
+import createLogger from '@chirp/lib/node/create-logger';
 
 (async function () {
   try {
@@ -22,7 +22,7 @@ import createLogger from '@chirp/lib/node/create-logger';
         origin: `https://${process.env.API_DOMAIN}`,
       })
     );
-    
+
     const mongoClient = new MongoClient(process.env.MONGODB_URI || '');
     await mongoClient.connect();
 
@@ -33,5 +33,5 @@ import createLogger from '@chirp/lib/node/create-logger';
   } catch (error) {
     console.error(error);
     process.exit(1);
-  } 
+  }
 })();

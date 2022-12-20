@@ -1,4 +1,10 @@
-import { LanguageCode, missingField, minimumFieldLength, maximumFieldLength, invalidEmailFormat } from './copy';
+import {
+  LanguageCode,
+  missingField,
+  minimumFieldLength,
+  maximumFieldLength,
+  invalidEmailFormat,
+} from './copy';
 import { preprocessEmail } from '@chirp/lib/utils/field-preprocessor';
 import getFieldCopy from '@chirp/lib/utils/get-field-copy';
 import { Chirp } from '@chirp/types/shared/chirp';
@@ -11,18 +17,20 @@ type ValidationFunctionOptions<ConfigType> = {
   logger: Chirp.UniversalLogger;
 };
 
-export type ValidationFunctionType<ConfigType> = (options: ValidationFunctionOptions<ConfigType>) => string | void;
+export type ValidationFunctionType<ConfigType> = (
+  options: ValidationFunctionOptions<ConfigType>
+) => string | void;
 
 function isDataObject(data: any): boolean {
-  return typeof data === 'object' &&
-    !Array.isArray(data) &&
-    data !== null;
+  return typeof data === 'object' && !Array.isArray(data) && data !== null;
 }
 
 export type IsRequiredValidationConfig = ValidationConfig<{
   key: string;
 }>;
-export const isRequiredValidation: ValidationFunctionType<IsRequiredValidationConfig> = ({ config, data, language, logger }) => {
+export const isRequiredValidation: ValidationFunctionType<
+  IsRequiredValidationConfig
+> = ({ config, data, language, logger }) => {
   const { key } = config;
 
   const fieldCopy = getFieldCopy(key, language, logger);
@@ -34,7 +42,7 @@ export const isRequiredValidation: ValidationFunctionType<IsRequiredValidationCo
 
   const value = data[key];
   const valueType = typeof value;
-  
+
   if (['undefined', 'null'].includes(valueType)) {
     return errorMessage;
   }
@@ -42,13 +50,20 @@ export const isRequiredValidation: ValidationFunctionType<IsRequiredValidationCo
 
 export type StringLengthValidationConfig = ValidationConfig<{
   key: string;
-  min?: number, 
-  max?: number
+  min?: number;
+  max?: number;
 }>;
-export const stringLengthValidation: ValidationFunctionType<StringLengthValidationConfig> = ({ config, data, language, logger }) => {
+export const stringLengthValidation: ValidationFunctionType<
+  StringLengthValidationConfig
+> = ({ config, data, language, logger }) => {
   const { key, max, min } = config;
 
-  const isRequiredError = isRequiredValidation({ config: { key }, data, language, logger });
+  const isRequiredError = isRequiredValidation({
+    config: { key },
+    data,
+    language,
+    logger,
+  });
   if (isRequiredError) return isRequiredError;
 
   const value = `${data[key]}`.trim();
@@ -56,7 +71,10 @@ export const stringLengthValidation: ValidationFunctionType<StringLengthValidati
   if (typeof min === 'number') {
     if (value.length < min) {
       const fieldCopy = getFieldCopy(key, language, logger);
-      const errorMessage = minimumFieldLength[language]({ field: fieldCopy, minLength: min });
+      const errorMessage = minimumFieldLength[language]({
+        field: fieldCopy,
+        minLength: min,
+      });
 
       return errorMessage;
     }
@@ -65,7 +83,10 @@ export const stringLengthValidation: ValidationFunctionType<StringLengthValidati
   if (typeof max === 'number') {
     if (value.length > max) {
       const fieldCopy = getFieldCopy(key, language, logger);
-      const errorMessage = maximumFieldLength[language]({ field: fieldCopy, maxLength: max });
+      const errorMessage = maximumFieldLength[language]({
+        field: fieldCopy,
+        maxLength: max,
+      });
 
       return errorMessage;
     }
@@ -75,17 +96,26 @@ export const stringLengthValidation: ValidationFunctionType<StringLengthValidati
 export type IsValidEmailValidationConfig = ValidationConfig<{
   key: string;
 }>;
-export const isValidEmailValidation: ValidationFunctionType<IsValidEmailValidationConfig> = ({ config, data, language, logger }) => {
+export const isValidEmailValidation: ValidationFunctionType<
+  IsValidEmailValidationConfig
+> = ({ config, data, language, logger }) => {
   const { key } = config;
 
-  const isRequiredError = isRequiredValidation({ config: { key }, data, language, logger });
+  const isRequiredError = isRequiredValidation({
+    config: { key },
+    data,
+    language,
+    logger,
+  });
   if (isRequiredError) return isRequiredError;
 
   const email = preprocessEmail(data[key]);
 
   // regex stolen from here:
   // https://stackoverflow.com/a/46181
-  const isValid = email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+  const isValid = email.match(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
   if (!isValid) {
     return invalidEmailFormat[language]();
   }

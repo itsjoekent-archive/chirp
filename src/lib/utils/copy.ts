@@ -1,7 +1,9 @@
 export type LanguageCode = 'en-US';
 export const supportedLanguages: LanguageCode[] = ['en-US'];
 
-type CopyDictionaryEntry<Tokens = any> = { [code in LanguageCode]: (tokens: Tokens) => string };
+type CopyDictionaryEntry<Tokens = any> = {
+  [code in LanguageCode]: (tokens: Tokens) => string;
+};
 type CopyDictionaryEntryStatic = { [code in LanguageCode]: () => string };
 
 function pluralize(count: number, singular: string = '', plural: string = 's') {
@@ -17,15 +19,23 @@ export const missingField: CopyDictionaryEntry<MissingFieldTokens> = {
   'en-US': (tokens: { field: string }) => `${tokens.field} is required`,
 };
 
-type MinimumFieldLengthTokens = { field: string, minLength: number };
-export const minimumFieldLength: CopyDictionaryEntry<MinimumFieldLengthTokens> = {
-  'en-US': (tokens: { field: string, minLength: number }) => `${tokens.field} must have at least ${tokens.field} character${pluralize(tokens.minLength)}`,
-};
+type MinimumFieldLengthTokens = { field: string; minLength: number };
+export const minimumFieldLength: CopyDictionaryEntry<MinimumFieldLengthTokens> =
+  {
+    'en-US': (tokens: { field: string; minLength: number }) =>
+      `${tokens.field} must have at least ${tokens.field} character${pluralize(
+        tokens.minLength
+      )}`,
+  };
 
-type MaximumFieldLengthTokens = { field: string, maxLength: number };
-export const maximumFieldLength: CopyDictionaryEntry<MaximumFieldLengthTokens> = {
-  'en-US': (tokens: { field: string, maxLength: number }) => `${tokens.field} can not have more than ${tokens.field} character${pluralize(tokens.maxLength)}`,
-};
+type MaximumFieldLengthTokens = { field: string; maxLength: number };
+export const maximumFieldLength: CopyDictionaryEntry<MaximumFieldLengthTokens> =
+  {
+    'en-US': (tokens: { field: string; maxLength: number }) =>
+      `${tokens.field} can not have more than ${
+        tokens.field
+      } character${pluralize(tokens.maxLength)}`,
+  };
 
 type DuplicateFieldTokens = { field: string };
 export const duplicateField: CopyDictionaryEntry<DuplicateFieldTokens> = {

@@ -1,15 +1,17 @@
 import { Chirp } from '@chirp/types/shared/chirp';
 
-export function transformChirper(chirper: Chirp.ServerChirper): Chirp.ClientChirper {
-  const { 
-    avatar, 
-    bio, 
-    name, 
-    pronouns, 
-    location, 
-    handle, 
-    isVerified, 
-    suspendedUntil, 
+export function transformChirper(
+  chirper: Chirp.ServerChirper
+): Chirp.ClientChirper {
+  const {
+    avatar,
+    bio,
+    name,
+    pronouns,
+    location,
+    handle,
+    isVerified,
+    suspendedUntil,
     joinedAt,
   } = chirper;
 

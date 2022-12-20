@@ -2,10 +2,14 @@ import createApiError from '@chirp/lib/node/create-api-error';
 import getLanguageFromRequest from '@chirp/lib/node/get-language-from-request';
 import { ServerValidationFunction } from '@chirp/lib/node/validate-request-body';
 import { duplicateField } from '@chirp/lib/utils/copy';
-import { PreprocessorFunction, preprocessHandle, preprocessEmail } from '@chirp/lib/utils/field-preprocessor';
+import {
+  PreprocessorFunction,
+  preprocessHandle,
+  preprocessEmail,
+} from '@chirp/lib/utils/field-preprocessor';
 import {
   ValidationFunctionType,
-  isRequiredValidation, 
+  isRequiredValidation,
   IsRequiredValidationConfig,
   isValidEmailValidation,
   IsValidEmailValidationConfig,
@@ -14,17 +18,20 @@ import {
 } from '@chirp/lib/utils/field-validations';
 import getFieldCopy from '@chirp/lib/utils/get-field-copy';
 
-function genericValidationWrapper<ConfigType>(validationFunction: ValidationFunctionType<ConfigType>): ServerValidationFunction<ConfigType> {
-  const innerValidationFunction: ServerValidationFunction<ConfigType> = (options) => {
-    const {
-      request,
-      logger,
-      config,
-    } = options;
+function genericValidationWrapper<ConfigType>(
+  validationFunction: ValidationFunctionType<ConfigType>
+): ServerValidationFunction<ConfigType> {
+  const innerValidationFunction: ServerValidationFunction<ConfigType> = (
+    options
+  ) => {
+    const { request, logger, config } = options;
 
     const language = getLanguageFromRequest(request);
     const errorMessage = validationFunction({
-      config, data: request.body, language, logger,
+      config,
+      data: request.body,
+      language,
+      logger,
     });
 
     if (errorMessage) {
@@ -33,36 +40,80 @@ function genericValidationWrapper<ConfigType>(validationFunction: ValidationFunc
   };
 
   return innerValidationFunction;
-};
+}
 
-export const isRequiredServerValidation = genericValidationWrapper<IsRequiredValidationConfig>(isRequiredValidation);
-export const stringLengthServerValidation = genericValidationWrapper<StringLengthValidationConfig>(stringLengthValidation);
-export const isValidEmailServerValidation = genericValidationWrapper<IsValidEmailValidationConfig>(isValidEmailValidation);
+export const isRequiredServerValidation =
+  genericValidationWrapper<IsRequiredValidationConfig>(isRequiredValidation);
+export const stringLengthServerValidation =
+  genericValidationWrapper<StringLengthValidationConfig>(
+    stringLengthValidation
+  );
+export const isValidEmailServerValidation =
+  genericValidationWrapper<IsValidEmailValidationConfig>(
+    isValidEmailValidation
+  );
 
-type UniqueValidationConfig<PreprocessorFunctionValueType, PreprocessorFunctionReturnType> = {
+type UniqueValidationConfig<
+  PreprocessorFunctionValueType,
+  PreprocessorFunctionReturnType
+> = {
   field: string;
   documentKey?: string;
   collection: string;
-  preprocessorFunction?: PreprocessorFunction<PreprocessorFunctionValueType, PreprocessorFunctionReturnType>;
+  preprocessorFunction?: PreprocessorFunction<
+    PreprocessorFunctionValueType,
+    PreprocessorFunctionReturnType
+  >;
 };
 
-type IsUniqueHandleValidationParameterType<PreprocessorFunctionValueType, PreprocessorFunctionReturnType> = Parameters<ServerValidationFunction<UniqueValidationConfig<PreprocessorFunctionValueType, PreprocessorFunctionReturnType>>>[0];
-type IsUniqueHandleValidationReturnType<PreprocessorFunctionValueType, PreprocessorFunctionReturnType> = ReturnType<ServerValidationFunction<UniqueValidationConfig<PreprocessorFunctionValueType, PreprocessorFunctionReturnType>>>;
+type IsUniqueHandleValidationParameterType<
+  PreprocessorFunctionValueType,
+  PreprocessorFunctionReturnType
+> = Parameters<
+  ServerValidationFunction<
+    UniqueValidationConfig<
+      PreprocessorFunctionValueType,
+      PreprocessorFunctionReturnType
+    >
+  >
+>[0];
+type IsUniqueHandleValidationReturnType<
+  PreprocessorFunctionValueType,
+  PreprocessorFunctionReturnType
+> = ReturnType<
+  ServerValidationFunction<
+    UniqueValidationConfig<
+      PreprocessorFunctionValueType,
+      PreprocessorFunctionReturnType
+    >
+  >
+>;
 
-async function isUniqueHandleValidationHelper<PreprocessorFunctionValueType = any, PreprocessorFunctionReturnType = string>(options: IsUniqueHandleValidationParameterType<PreprocessorFunctionValueType, PreprocessorFunctionReturnType>): Promise<IsUniqueHandleValidationReturnType<PreprocessorFunctionValueType, PreprocessorFunctionReturnType>> {
-  const {
-    request,
-    logger,
-    config,
-    mongoClient,
-  } = options;
+async function isUniqueHandleValidationHelper<
+  PreprocessorFunctionValueType = any,
+  PreprocessorFunctionReturnType = string
+>(
+  options: IsUniqueHandleValidationParameterType<
+    PreprocessorFunctionValueType,
+    PreprocessorFunctionReturnType
+  >
+): Promise<
+  IsUniqueHandleValidationReturnType<
+    PreprocessorFunctionValueType,
+    PreprocessorFunctionReturnType
+  >
+> {
+  const { request, logger, config, mongoClient } = options;
 
   const { field, documentKey, collection, preprocessorFunction } = config;
   const data = request.body;
 
   const language = getLanguageFromRequest(request);
   const errorMessage = isRequiredValidation({
-    config: { key: field }, data, language, logger,
+    config: { key: field },
+    data,
+    language,
+    logger,
   });
 
   if (errorMessage) {
@@ -73,14 +124,38 @@ async function isUniqueHandleValidationHelper<PreprocessorFunctionValueType = an
   const value = preprocessorFunction ? preprocessorFunction(raw) : raw;
 
   const database = mongoClient.db('chirp');
-  const queryResult = await database.collection(collection).findOne({ [documentKey || field]: value });
+  const queryResult = await database
+    .collection(collection)
+    .findOne({ [documentKey || field]: value });
 
   if (queryResult) {
-    throw createApiError(duplicateField[language]({
-      field: getFieldCopy(field, language, logger),
-    }));
+    throw createApiError(
+      duplicateField[language]({
+        field: getFieldCopy(field, language, logger),
+      })
+    );
   }
 }
 
-export const isUniqueHandleValidation: ServerValidationFunction<{}> = async (options) => isUniqueHandleValidationHelper({ ...options, config: { field: 'handle', collection: 'chirpers', preprocessorFunction: preprocessHandle } });
-export const isUniqueEmailValidation: ServerValidationFunction<{}> = async (options) => isUniqueHandleValidationHelper({ ...options, config: { field: 'email', collection: 'chirpers', preprocessorFunction: preprocessEmail } });
+export const isUniqueHandleValidation: ServerValidationFunction<{}> = async (
+  options
+) =>
+  isUniqueHandleValidationHelper({
+    ...options,
+    config: {
+      field: 'handle',
+      collection: 'chirpers',
+      preprocessorFunction: preprocessHandle,
+    },
+  });
+export const isUniqueEmailValidation: ServerValidationFunction<{}> = async (
+  options
+) =>
+  isUniqueHandleValidationHelper({
+    ...options,
+    config: {
+      field: 'email',
+      collection: 'chirpers',
+      preprocessorFunction: preprocessEmail,
+    },
+  });

@@ -4,7 +4,9 @@ import type { Logger } from 'pino';
 import { Chirp } from '@chirp/types/shared/chirp';
 
 export type ServerValidationReturnType = Chirp.ErrorApiResponse | void;
-export type ServerValidationFunctionReturnType = Promise<ServerValidationReturnType> | ServerValidationReturnType;
+export type ServerValidationFunctionReturnType =
+  | Promise<ServerValidationReturnType>
+  | ServerValidationReturnType;
 
 type ServerValidationFunctionBaseOptions = {
   request: Request;
@@ -12,15 +14,19 @@ type ServerValidationFunctionBaseOptions = {
   logger: Logger;
 };
 
-export type ServerValidationFunction<Config> = (options: ServerValidationFunctionBaseOptions & {
-  config: Config;
-}) => ServerValidationFunctionReturnType
+export type ServerValidationFunction<Config> = (
+  options: ServerValidationFunctionBaseOptions & {
+    config: Config;
+  }
+) => ServerValidationFunctionReturnType;
 
 export default async function validateRequestBody<ParsedBodyType>(
   request: Request,
   mongoClient: MongoClient,
   logger: Logger,
-  validations: ((baseOptions: ServerValidationFunctionBaseOptions) => ReturnType<ServerValidationFunction<any>>)[],
+  validations: ((
+    baseOptions: ServerValidationFunctionBaseOptions
+  ) => ReturnType<ServerValidationFunction<any>>)[]
 ): Promise<ParsedBodyType> {
   const { body } = request;
 

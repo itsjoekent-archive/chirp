@@ -9,14 +9,12 @@ import postChirper from './post-chirper';
 
 // ⬇️ Add new routes here ⬇️
 // -------------------
-const routes: Chirp.RequestDefinition[] = [
-  postChirper,
-];
+const routes: Chirp.RequestDefinition[] = [postChirper];
 
 export default function setupRoutes(
   app: Application,
   logger: Logger,
-  mongoClient: MongoClient,
+  mongoClient: MongoClient
 ) {
   const router = Router();
   app.use('/v1', router);
@@ -26,7 +24,7 @@ export default function setupRoutes(
     response.set('Content-Language', language);
   });
 
-  const routeWrapperGenerator = (routeDefinition: Chirp.RequestDefinition) => 
+  const routeWrapperGenerator = (routeDefinition: Chirp.RequestDefinition) =>
     routeWrapper(router, routeDefinition, logger, mongoClient);
 
   routes.forEach((route) => routeWrapperGenerator(route));

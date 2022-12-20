@@ -1,4 +1,6 @@
-export type PreprocessorFunction<ValueType = any, ReturnType = string> = (value: ValueType) => ReturnType;
+export type PreprocessorFunction<ValueType = any, ReturnType = string> = (
+  value: ValueType
+) => ReturnType;
 
 export const preprocessName: PreprocessorFunction = (value) => {
   return `${value}`.trim();

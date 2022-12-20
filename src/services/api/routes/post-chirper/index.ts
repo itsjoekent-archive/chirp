@@ -6,17 +6,33 @@ import fieldValidationGroups from '@chirp/lib/node/field-validation-groups';
 import getLanguageFromRequest from '@chirp/lib/node/get-language-from-request';
 import validateRequestBody from '@chirp/lib/node/validate-request-body';
 import { genericServerError } from '@chirp/lib/utils/copy';
-import { preprocessEmail, preprocessHandle, preprocessName, preprocessPronouns } from '@chirp/lib/utils/field-preprocessor';
+import {
+  preprocessEmail,
+  preprocessHandle,
+  preprocessName,
+  preprocessPronouns,
+} from '@chirp/lib/utils/field-preprocessor';
 import { Chirp } from '@chirp/types/shared/chirp';
 
-const handler: Chirp.RequestHandler = async ({ request, response, logger, mongoClient }) => {
-  const postChirperRequestBody = await validateRequestBody<Chirp.PostChirperRequestBody>(request, mongoClient, logger, [
-    ...fieldValidationGroups.email,
-    ...fieldValidationGroups.handle,
-    ...fieldValidationGroups.name,
-    ...fieldValidationGroups.pronouns,
-    ...fieldValidationGroups.password,
-  ]);
+const handler: Chirp.RequestHandler = async ({
+  request,
+  response,
+  logger,
+  mongoClient,
+}) => {
+  const postChirperRequestBody =
+    await validateRequestBody<Chirp.PostChirperRequestBody>(
+      request,
+      mongoClient,
+      logger,
+      [
+        ...fieldValidationGroups.email,
+        ...fieldValidationGroups.handle,
+        ...fieldValidationGroups.name,
+        ...fieldValidationGroups.pronouns,
+        ...fieldValidationGroups.password,
+      ]
+    );
 
   const postChirperRequestProcessed: Chirp.PostChirperRequestBody = {
     ...postChirperRequestBody,
@@ -42,7 +58,9 @@ const handler: Chirp.RequestHandler = async ({ request, response, logger, mongoC
   const collection = database.collection('chirpers');
 
   const { insertedId } = await collection.insertOne(toInsert);
-  const document = await collection.findOne<Chirp.ServerChirper>({ _id: insertedId });
+  const document = await collection.findOne<Chirp.ServerChirper>({
+    _id: insertedId,
+  });
 
   if (!document) {
     throw createApiError(genericServerError[getLanguageFromRequest(request)]());
@@ -62,5 +80,9 @@ const handler: Chirp.RequestHandler = async ({ request, response, logger, mongoC
     .json(responseData);
 };
 
-const definition: Chirp.RequestDefinition = { handler, method: 'post', path: '/chirper' };
+const definition: Chirp.RequestDefinition = {
+  handler,
+  method: 'post',
+  path: '/chirper',
+};
 export default definition;

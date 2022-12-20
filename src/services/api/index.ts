@@ -1,8 +1,10 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import pinoHttp from 'pino-http';
 import createLogger from '@chirp/lib/node/create-logger';
+import routes from './routes';
 
 (async function () {
   try {
@@ -23,10 +25,12 @@ import createLogger from '@chirp/lib/node/create-logger';
       })
     );
 
+    app.use(bodyParser.json());
+
     const mongoClient = new MongoClient(process.env.MONGODB_URI || '');
     await mongoClient.connect();
 
-    const database = mongoClient.db('chirp');
+    routes(app, logger, mongoClient);
 
     const PORT = process.env.API_PORT;
     app.listen(PORT, () => logger.info(`Listening on port:${PORT}`));

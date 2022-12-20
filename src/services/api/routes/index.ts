@@ -17,7 +17,7 @@ export default function setupRoutes(
   mongoClient: MongoClient
 ) {
   const router = Router();
-  app.use('/v1', router);
+  app.use('/api/v1', router);
 
   app.use((request, response) => {
     const language = getLanguageFromRequest(request);

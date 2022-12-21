@@ -3,16 +3,18 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "dev": "npx nodemon src/index.ts"
   },
   "dependencies": {
     "@chirp/lib-node": "*",
     "@chirp/lib-utils": "*",
     "@chirp/types": "*",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "pino-http": "^8.3.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
-    "pino-http": "^8.3.0"
+    "pino-pretty": "^9.1.1"
   }
 }

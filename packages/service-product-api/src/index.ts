@@ -3,9 +3,11 @@ import cors from 'cors';
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import pinoHttp from 'pino-http';
+import * as dotenv from 'dotenv'
 import { createLogger } from '@chirp/lib-node';
 import routes from './routes';
 
+dotenv.config();
 const isLocalDevelopment = process.env.IS_LOCAL_DEVELOPMENT === 'true';
 
 (async function () {

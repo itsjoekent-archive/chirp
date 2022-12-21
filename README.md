@@ -44,3 +44,16 @@ $ npm install package-name
 # Install for just a single Chirp package
 $ npm install package-name --workspace @chirp/package-name
 ```
+
+You can run one off commands on a package or against all of them,
+
+```sh
+$ npm run build --workspace @chirp-package-name
+$ npm run build --workspaces
+```
+
+However, if you want to run multiple commands in parallel, you'll need to use a custom CLI tool.
+
+```sh
+$ ./cli/index.js --command run-all --npm dev
+```

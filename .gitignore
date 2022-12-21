@@ -30,8 +30,7 @@ dist/
 .eslintcache
 
 # dotenv environment variables file
-env/.env.node
-env/.env.web
+.env
 
 # Terraform
 .terraform

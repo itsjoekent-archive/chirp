@@ -30,7 +30,9 @@ function genericValidationWrapper<ConfigType>(
 }
 
 export const isRequiredServerValidation =
-  genericValidationWrapper<fieldValidations.IsRequiredValidationConfig>(fieldValidations.isRequiredValidation);
+  genericValidationWrapper<fieldValidations.IsRequiredValidationConfig>(
+    fieldValidations.isRequiredValidation
+  );
 export const stringLengthServerValidation =
   genericValidationWrapper<fieldValidations.StringLengthValidationConfig>(
     fieldValidations.stringLengthValidation
@@ -47,7 +49,7 @@ type UniqueValidationConfig<
   field: string;
   documentKey?: string;
   collection: string;
-    preprocessorFunction?: fieldPreprocessors.PreprocessorFunction<
+  preprocessorFunction?: fieldPreprocessors.PreprocessorFunction<
     PreprocessorFunctionValueType,
     PreprocessorFunctionReturnType
   >;

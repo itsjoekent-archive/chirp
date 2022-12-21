@@ -14,13 +14,13 @@ export module Chirp {
   export type ChirpAttachment = {
     id: string;
     type:
-    | 'IMAGE'
-    | 'VIDEO'
-    | 'LINK'
-    | 'POLL'
-    | 'HASHTAG'
-    | 'AUTO_DELETE'
-    | 'GIF';
+      | 'IMAGE'
+      | 'VIDEO'
+      | 'LINK'
+      | 'POLL'
+      | 'HASHTAG'
+      | 'AUTO_DELETE'
+      | 'GIF';
   };
 
   export type ImageChirpAttachment = {
@@ -130,17 +130,17 @@ export module Chirp {
 
   export type DataApiResponse<DataType> =
     | {
-      data: DataType;
-    }
+        data: DataType;
+      }
     | ErrorApiResponse;
 
   export type PaginatedDataApiResponse<DataType> =
     | {
-      data: DataType[];
-      pagination: {
-        lastId: string;
-      };
-    }
+        data: DataType[];
+        pagination: {
+          lastId: string;
+        };
+      }
     | ErrorApiResponse;
 
   export type PostChirperRequestBody = {

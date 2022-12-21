@@ -34,7 +34,9 @@ const handler: Chirp.RequestHandler = async ({
     ...postChirperRequestBody,
     handle: fieldPreprocessors.preprocessHandle(postChirperRequestBody.handle),
     name: fieldPreprocessors.preprocessName(postChirperRequestBody.name),
-    pronouns: fieldPreprocessors.preprocessPronouns(postChirperRequestBody.pronouns),
+    pronouns: fieldPreprocessors.preprocessPronouns(
+      postChirperRequestBody.pronouns
+    ),
     email: fieldPreprocessors.preprocessEmail(postChirperRequestBody.email),
   };
 
@@ -59,7 +61,9 @@ const handler: Chirp.RequestHandler = async ({
   });
 
   if (!document) {
-    throw createApiError(copy.genericServerError[getLanguageFromRequest(request)]());
+    throw createApiError(
+      copy.genericServerError[getLanguageFromRequest(request)]()
+    );
   }
 
   const clientChirper = documentTransformers.transformChirper(document);

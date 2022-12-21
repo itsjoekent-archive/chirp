@@ -41,6 +41,10 @@ export const isValidEmailServerValidation =
   genericValidationWrapper<fieldValidations.IsValidEmailValidationConfig>(
     fieldValidations.isValidEmailValidation
   );
+export const isValidHandleServerValidation =
+  genericValidationWrapper<fieldValidations.IsValidHandleValidation>(
+    fieldValidations.isValidHandleValidation
+  );
 
 type UniqueValidationConfig<
   PreprocessorFunctionValueType,

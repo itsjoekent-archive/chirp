@@ -4,9 +4,10 @@ import {
   missingField,
   minimumFieldLength,
   maximumFieldLength,
+  invalidCharacters,
   invalidEmailFormat,
 } from './copy';
-import { preprocessEmail } from './field-preprocessor';
+import { preprocessEmail, preprocessHandle } from './field-preprocessor';
 import getFieldCopy from './get-field-copy';
 
 type ValidationConfig<T> = T;
@@ -102,7 +103,7 @@ export const isValidEmailValidation: ValidationFunctionType<
   const { key } = config;
 
   const isRequiredError = isRequiredValidation({
-    config: { key },
+    config,
     data,
     language,
     logger,
@@ -118,5 +119,35 @@ export const isValidEmailValidation: ValidationFunctionType<
   );
   if (!isValid) {
     return invalidEmailFormat[language]();
+  }
+};
+
+export type IsValidHandleValidation = ValidationConfig<{
+  key: string;
+}>;
+export const isValidHandleValidation: ValidationFunctionType<IsValidHandleValidation> = ({ config, data, language, logger }) => {
+  const { key } = config;
+
+  const isRequiredError = isRequiredValidation({
+    config,
+    data,
+    language,
+    logger,
+  });
+  if (isRequiredError) return isRequiredError;
+
+  const handle = preprocessHandle(data[key]);
+  const match = handle.match(new RegExp(/[\p{L}0-9_-]*/u));
+
+  if (!match || match[0] !== handle) {
+    const fieldCopy = getFieldCopy(key, language, logger);
+
+    return invalidCharacters[language]({
+      field: fieldCopy,
+      allowLetters: true,
+      allowNumbers: true,
+      allowedDashes: true,
+      allowedUnderscore: true,
+    });
   }
 };

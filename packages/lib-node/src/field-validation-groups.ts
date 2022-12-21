@@ -5,6 +5,7 @@ import {
   isUniqueHandleValidation,
   isUniqueEmailValidation,
   isValidEmailServerValidation,
+  isValidHandleServerValidation,
   stringLengthServerValidation,
 } from './field-validations';
 import { ServerValidationFunctionReturnType } from './validate-request-body';
@@ -42,6 +43,7 @@ const fieldValidationGroups: Record<
         ...options,
         config: { key: 'name', min: 1, max: 16 },
       }),
+    (options) => isValidHandleServerValidation({ ...options, config: { key: 'handle' } }),
     (options) => isUniqueHandleValidation({ ...options, config: emptyConfig }),
   ],
   email: [

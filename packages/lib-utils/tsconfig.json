@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfigs/tsconfig.isomorphic.json",
+  "compilerOptions": {
+    "declarationDir": "dist",
+    "outDir": "dist"
+  },  
+  "include": [
+    "src/**/*"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "@chirp/types",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit"
+  }
+}

@@ -1,37 +1,15 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: .
-      dockerfile: ./node.dockerfile
-    depends_on:
-      - mongo
-      - redis
-    ports:
-      - '5001:5001'
-    environment:
-      - API_DOMAIN=localhost:5001
-      - API_PORT=5001
-      - IS_LOCAL_DEVELOPMENT=true
-      - MONGODB_URI=mongodb://admin:secret@mongo:27017
-      - NODE_ENV=development
-      - REDIS_URL=redis://redis
-    volumes:
-      - ./src:/usr/src/code/src:cached
-
   mongo:
-    command: --quiet
     image: mongo:4
-    ports:
-      - '27017:27017'
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+      - "27017:27017"
 
   redis:
     image: redis:4
     ports:
-      - '6379:6379'
-    logging:
-      driver: none
+      - "6379:6379"

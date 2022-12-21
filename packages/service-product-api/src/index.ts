@@ -34,6 +34,8 @@ const isLocalDevelopment = process.env.IS_LOCAL_DEVELOPMENT === 'true';
     const mongoClient = new MongoClient(process.env.MONGODB_URI || '');
     await mongoClient.connect();
 
+    logger.info('Connected to Mongo');
+
     routes(app, logger, mongoClient);
 
     const PORT = process.env.API_PORT;

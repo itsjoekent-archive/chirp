@@ -6,17 +6,13 @@ new twitter without the fascists
 
 Install [Node Version Manager](https://github.com/nvm-sh/nvm), and [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
-To get started, run the following commands,
+To get started with local development, run the following command,
 
 ```sh
-$ nvm use
-$ npm ci
-$ npm run build --workspaces
-$ make start-dev-resources
-$ npm run dev --workspaces
+$ make dev
 ```
 
-To terminate the database, redis cluster, and other supporting background resources,
+To terminate the detached background resources, such as mongodb and redis, run the following command after you terminate the `make dev` command,
 
 ```sh
 $ make stop-dev-resources

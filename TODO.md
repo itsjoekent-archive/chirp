@@ -1,3 +1,7 @@
-- no symbols in handle
+- move string length checker to handle validation
+- should we allow international letters in handles?? does twitter allow that?
+  - it doesn't.
+  - let's keep the foreign characters for the name/location
+- create letters only check for name & pronouns
 - fix token date
 - fix token value

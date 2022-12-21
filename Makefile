@@ -1,6 +1,6 @@
-start-dev-services:
-	docker-compose -f services.compose.yml build
-	docker-compose -f services.compose.yml up --detach 
+start-dev-resources:
+	docker-compose -f resources.compose.yml build
+	docker-compose -f resources.compose.yml up --detach 
 
-stop-dev-services:
-	docker-compose -f services.compose.yml down
+stop-dev-resources:
+	docker-compose -f resources.compose.yml down

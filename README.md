@@ -12,14 +12,14 @@ To get started, run the following commands,
 $ nvm use
 $ npm ci
 $ npm run build --workspaces
-$ make start-dev-services
+$ make start-dev-resources
 $ npm run dev --workspaces
 ```
 
-To terminate the database, redis cluster, and other supporting background services,
+To terminate the database, redis cluster, and other supporting background resources,
 
 ```sh
-$ make stop-dev-services
+$ make stop-dev-resources
 ```
 
 ## NPM Workspace
